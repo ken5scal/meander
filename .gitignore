@@ -1,0 +1,9 @@
+*.iml
+.idea/*
+db/*
+.db/*
+setup.sh
+nsqd*
+votes*
+twittervotes/twittervotes
+api/api
