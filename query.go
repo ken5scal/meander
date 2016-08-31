@@ -1,7 +1,7 @@
 package meander
 
 type Place struct {
-	*googleGeometry `json:"geometry"`
+	*googleGeometry `json:"geometry"` // Express Nested API data
 	Name string `json:"name"`
 	Icon string `json:"icon"`
 	Photos []*googlePhoto `json:"photos"`
