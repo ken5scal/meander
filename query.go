@@ -1,12 +1,12 @@
 package meander
 
-import "github.com/stretchr/testify/require"
+var APIKey string
 
 type Place struct {
 	*googleGeometry `json:"geometry"` // Express Nested API data
-	Name string `json:"name"`
-	Icon string `json:"icon"`
-	Photos []*googlePhoto `json:"photos"`
+	Name     string `json:"name"`
+	Icon     string `json:"icon"`
+	Photos   []*googlePhoto `json:"photos"`
 	Vicinity string `json:"vicinity"`
 }
 
@@ -25,12 +25,12 @@ type googleLocation struct {
 
 type googlePhoto struct {
 	PhotoRef string `json:"photo_reference"`
-	URL string `json:"url"`
+	URL      string `json:"url"`
 }
 
 // Use this to return data from outside request
 func (p *Place) Public() interface{} {
-	return map[string]interface{} {
+	return map[string]interface{}{
 		"name": p.Name,
 		"icon": p.Icon,
 		"photos": p.Photos,
