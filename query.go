@@ -28,6 +28,7 @@ type googlePhoto struct {
 	URL string `json:"url"`
 }
 
+// Use this to return data from outside request
 func (p *Place) Public() interface{} {
 	return map[string]interface{} {
 		"name": p.Name,
