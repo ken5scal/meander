@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	meander.APIKey = "AIzaSyC6sW618tLJn2str3cCpCxSywSAj6pdEGg"
+	meander.APIKey = `env:SP_GOOGLE_PLACE_API_KEY",required"`
 	http.HandleFunc("/journeys", func(w http.ResponseWriter, r *http.Request) {
 		respond(w, r, meander.Journeys)
 	})
