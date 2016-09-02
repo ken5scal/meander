@@ -1,5 +1,11 @@
 package meander
 
+import (
+	"testing"
+	"github.com/cheekybits/is"
+	"github.com/ken5scal/goblueprints/chapter7/meander"
+)
+
 type Cost int8
 
 const (
