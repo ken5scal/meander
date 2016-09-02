@@ -1,11 +1,5 @@
 package meander
 
-import (
-	"testing"
-	"github.com/cheekybits/is"
-	"github.com/ken5scal/goblueprints/chapter7/meander"
-)
-
 type Cost int8
 
 const (
@@ -17,7 +11,7 @@ const (
 	Cost5
 )
 
-var costStrings = map[string]Cost {
+var costStrings = map[string]Cost{
 	"$": Cost1,
 	"$$": Cost2,
 	"$$$": Cost3,
@@ -26,10 +20,14 @@ var costStrings = map[string]Cost {
 }
 
 func (l Cost) String() string {
-	for s,v := range costStrings {
-		if l==v {
+	for s, v := range costStrings {
+		if l == v {
 			return s
 		}
 	}
 	return "Invalid value"
+}
+
+func ParseCost(s string) Cost {
+	return costStrings[s]
 }
