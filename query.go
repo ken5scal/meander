@@ -93,7 +93,7 @@ func (q *Query) Run() []interface{} {
 	var w sync.WaitGroup
 	var l sync.Mutex
 	places := make([]interface{}, len(q.Journey))
-	for i, r:= range q.Journey{
+	for i, r := range q.Journey {
 		w.Add(1)
 		go func(types string, i int) {
 			defer w.Done()
@@ -103,7 +103,7 @@ func (q *Query) Run() []interface{} {
 				return
 			}
 
-			if len(response.Results) == 0{
+			if len(response.Results) == 0 {
 				log.Println("Couldnt find facility: ", types)
 				return
 			}
@@ -111,15 +111,15 @@ func (q *Query) Run() []interface{} {
 			for _, result := range response.Results {
 				for _, photo := range result.Photos {
 					photo.URL = "https://maps.googleapis.com/maps/api/place/photo?" +
-					"maxwidth=1000&photoreference=" + photo.PhotoRef +
-					"&key=" + APIKey
+						"maxwidth=1000&photoreference=" + photo.PhotoRef +
+						"&key=" + APIKey
 				}
 			}
 			randI := rand.Intn(len(response.Results))
 			l.Lock()
 			places[i] = response.Results[randI]
 			l.Unlock()
-		}(r,i)
+		}(r, i)
 	}
 	w.Wait()
 	return places
