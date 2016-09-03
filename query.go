@@ -39,3 +39,13 @@ func (p *Place) Public() interface{} {
 		"lng": p.Lng,
 	}
 }
+
+// Query Structure gto Google Places API
+type Query struct {
+	Lat float64
+	Lng float64
+	Journey []string
+	Radius int
+	CostRangeStr string
+}
+
