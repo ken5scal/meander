@@ -90,13 +90,13 @@ func (q *Query) find(types string) (*googleResponse, error) {
 
 func (q *Query) Run() []interface{} {
 	rand.Seed(time.Now().UnixNano())
-	var w sync.WaitGroup
-	var l sync.Mutex
+	var w sync.WaitGroup				// Use this to wait all goruotine to be finished
+	var l sync.Mutex					// All goruotine can safely access to slice which holds facility
 	places := make([]interface{}, len(q.Journey))
 	for i, r := range q.Journey {
 		w.Add(1)
 		go func(types string, i int) {
-			defer w.Done()
+			defer w.Done()				// Done() method notifies WaitGroup object request has been done
 			response, err := q.find(types)
 			if err != nil {
 				log.Println("Failed searching facility: ", err)
@@ -121,6 +121,6 @@ func (q *Query) Run() []interface{} {
 			l.Unlock()
 		}(r, i)
 	}
-	w.Wait()
+	w.Wait()    // wait all request to be finished
 	return places
 }
