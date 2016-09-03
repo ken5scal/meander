@@ -46,7 +46,7 @@ func (r CostRange) String() string {
 	return r.From.String() + "..." + r.To.String()
 }
 
-func ParseCostRange(s string) *CostRange {
+func ParseCostRange(s string) (CostRange, error) {
 	var r CostRange
 	segs := strings.Split(s, "...")
 	if len(segs) != 2 {

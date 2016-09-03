@@ -37,11 +37,11 @@ func TestParseCost(t *testing.T) {
 func TestParseCostRange(t *testing.T) {
 	is := is.New(t)
 	var l *meander.CostRange
-	l = meander.ParseCostRange("$$...$$$")
+	l, _ = meander.ParseCostRange("$$...$$$")
 	is.Equal(l.From, meander.Cost2)
 	is.Equal(l.To, meander.Cost3)
 
-	l = meander.ParseCostRange("$...$$$$$")
+	l, _ = meander.ParseCostRange("$...$$$$$")
 	is.Equal(l.From, meander.Cost1)
 	is.Equal(l.To, meander.Cost5)
 }
