@@ -1,5 +1,12 @@
 package meander
 
+import (
+	"net/url"
+	"fmt"
+	"net/http"
+	"encoding/json"
+)
+
 var APIKey string
 
 type Place struct {
@@ -47,5 +54,27 @@ type Query struct {
 	Journey []string
 	Radius int
 	CostRangeStr string
+}
+
+func (q *Query) find(types string) (*googleResponse, error) {
+	u := "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+	vals := make(url.Values)
+	vals.Set("location", fmt.Sprintf("%g,%g", q.Lat, q.Lng))
+	vals.Set("radius", fmt.Sprintf("%d", q.Radius))
+	vals.Set("types", types)
+	vals.Set("key",APIKey)
+	if len(q.CostRangeStr) > 0 {
+		r := ParseCostRange(q.CostRangeStr)
+		vals.Set("minprice", fmt.Sprintf("%d", int(r.From) -1))
+		vals.Set("maxprice", fmt.Sprintf("%d", int(r.To) -1))
+	}
+	res, err := http.Get(u + "?" + vals.Encode())
+	if err != nil {return nil, err}
+	defer res.Body.Close()
+	var response googleResponse
+	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
+		return nil ,err
+	}
+	return &response, nil
 }
 
