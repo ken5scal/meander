@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"strings"
 	"strconv"
+	"os"
 )
 
 func main() {
-	meander.APIKey = `env:SP_GOOGLE_PLACE_API_KEY",required"`
+	meander.APIKey = os.Getenv("SP_GOOGLE_PLACE_API_KEY")
 	http.HandleFunc("/journeys", cors(func(w http.ResponseWriter, r *http.Request) {
 		respond(w, r, meander.Journeys)
 	}))
