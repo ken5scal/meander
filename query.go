@@ -5,6 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"encoding/json"
+	"sync"
+	"math/rand"
+	"time"
+	"log"
 )
 
 var APIKey string
@@ -84,3 +88,39 @@ func (q *Query) find(types string) (*googleResponse, error) {
 	return &response, nil
 }
 
+func (q *Query) Run() []interface{} {
+	rand.Seed(time.Now().UnixNano())
+	var w sync.WaitGroup
+	var l sync.Mutex
+	places := make([]interface{}, len(q.Journey))
+	for i, r:= range q.Journey{
+		w.Add(1)
+		go func(types string, i int) {
+			defer w.Done()
+			response, err := q.find(types)
+			if err != nil {
+				log.Println("Failed searching facility: ", err)
+				return
+			}
+
+			if len(response.Results) == 0{
+				log.Println("Couldnt find facility: ", types)
+				return
+			}
+
+			for _, result := range response.Results {
+				for _, photo := range result.Photos {
+					photo.URL = "https://maps.googleapis.com/maps/api/place/photo?" +
+					"maxwidth=1000&photoreference=" + photo.PhotoRef +
+					"&key=" + APIKey
+				}
+			}
+			randI := rand.Intn(len(response.Results))
+			l.Lock()
+			places[i] = response.Results[randI]
+			l.Unlock()
+		}(r,i)
+	}
+	w.Wait()
+	return places
+}
